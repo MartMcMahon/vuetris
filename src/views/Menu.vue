@@ -1,0 +1,24 @@
+<template>
+<v-app>
+	<v-list>
+		<v-list-tile>
+			<v-btn
+				class="primary"
+				raised
+				to='/game'
+			>
+			start
+			</v-btn>
+		</v-list-tile>
+		<v-list-tile>
+			<v-btn
+				dark
+				raised
+				to='/'
+			>
+			quit
+			</v-btn>
+		</v-list-tile>
+	</v-list>
+</v-app>
+</template>
