@@ -27,8 +27,8 @@ export default class GameManager {
 
 	handleTick() {
 		if (store.getters.gameState === 'running') {
-			// console.log(store.getters.currentBlock)
 			store.dispatch('tickCurrentBlockDown')
+      store.dispatch('checkGameState')
 		}
 	}
 
@@ -52,7 +52,7 @@ export default class GameManager {
 	checkLeft(block: Block) {
 		let newLoc = Object.assign({}, block)
 		newLoc.x--
-		
+
 		if (newLoc.x < 0) {
 			console.log('that`s the left wall!')
 			return false

@@ -1,3 +1,5 @@
+import store from '@/store'
+
 export interface Block {
   x: number
   y: number
@@ -127,15 +129,36 @@ export default class BlockManager {
   }
 
   public static rotate(block: Block, rotDirection: any): Block {
+    const newBlock = Object.assign({}, block)
     if (rotDirection === 'cw') {
       console.log(block)
 
-      // test for borders
+      // swap width and height
+      newBlock.width = block.height
+      newBlock.height = block.width
 
       // mix around matricies
+      newBlock.matrix = Array(newBlock.height)
+      console.log(newBlock)
+      for (let y = 0; y < newBlock.height; y++) {
+        newBlock.matrix[y] = Array(newBlock.width)
+        for (let x = 0; x < newBlock.width; x++) {
+          newBlock.matrix[y][x] = block.matrix[block.height - x - 1][y]
+        }
+      }
 
-      // swap width and height
+      // test for borders
+      if (! store.state.gameManager.checkBricks(newBlock) ) {
+        return block
+      }
+    } else if (rotDirection === 'acw') {
+      // test for borders
+      //
+      //       // mix around matricies
+      //
+      //             // swap width and height
+      //
     }
-    return this.Square
+    return newBlock
   }
 }
