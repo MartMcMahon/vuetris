@@ -5,6 +5,8 @@ import GameManager from '@/gameManager'
 import BlockManager, { Block } from '@/classes/blocks'
 import { Direction } from '@/classes/direction'
 
+import { bus } from '@/bus'
+
 Vue.use(Vuex)
 
 export default new Vuex.Store({
@@ -413,6 +415,7 @@ export default new Vuex.Store({
           } else {
             // add to the board!
             context.dispatch('addBlockToBoard', block)
+            bus.$emit('blockPlace')
           }
           break
           case Direction.left:

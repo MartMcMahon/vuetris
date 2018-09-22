@@ -11,6 +11,7 @@ export default {
 
 		}
 	},
+
 	created() {
 		console.log('sup')
 	},
@@ -18,7 +19,7 @@ export default {
 	methods: {
 		handleKeyUp(e) {
 			e.preventDefault()
-			// let vec = []
+      // e.detail.keyboardEvent.preventDefault()
 			switch (e.key) {
 				default: return;
 				case 'w':
@@ -63,11 +64,14 @@ export default {
 			// 		() => this.$store.dispatch('tick'),
 			// 		() => console.log('rejected'),
 			// 	)
-		}
+
+		},
 	},
+
 	created() {
   	window.addEventListener('keyup', this.handleKeyUp)
 	},
+
 	destroyed() {
   	window.removeEventListener('keyup', this.handleKeyUp)
 	},

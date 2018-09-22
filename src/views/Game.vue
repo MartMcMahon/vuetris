@@ -11,7 +11,7 @@
 </div>
 </template>
 
-<script lang="ts">
+<script>
 // import { Component, Vue } from 'vue-property-decorator';
 import Vue from 'vue';
 import GameArea from '@/components/GameArea.vue';
@@ -21,7 +21,9 @@ import ScoreView from '@/components/scoreView.vue';
 
 import DebugMenu from '@/debug/debug.vue'
 
-// import { bus } from '@/bus'
+import { bus } from '@/bus'
+
+import styles from '../effects/shakeAnimation.css'
 
 export default {
 	components: {
@@ -34,6 +36,9 @@ export default {
 
 	created() {
 		console.log('Game created')
+
+    // shake screen on block drop
+    bus.$on('blockPlace', this.shake)
 	},
 
   data() {
@@ -43,7 +48,11 @@ export default {
   },
 
 	methods: {
-
+    shake() {
+      console.log('shake!!')
+      this.screenIsShaking = true
+      setTimeout(() => this.screenIsShaking = false, 200)
+    },
 	},
 }
 </script>
