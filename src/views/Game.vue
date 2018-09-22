@@ -1,6 +1,7 @@
 <template>
 <div class="game-view">
-	<game-area class="game-area"></game-area>
+  <game-area class="game-area" id="top-layer" v-bind:class="{ screenshake: screenIsShaking}" >
+  </game-area>
 	<controller></controller>
 	<div class="sidebar">
 		<next-block-div></next-block-div>
@@ -30,11 +31,19 @@ export default {
 		'next-block-div': NextBlockView,
 		'score-div': ScoreView,
   },
+
 	created() {
-		console.log('Game created')		
+		console.log('Game created')
 	},
+
+  data() {
+    return {
+      screenIsShaking: false,
+    }
+  },
+
 	methods: {
-		
+
 	},
 }
 </script>
