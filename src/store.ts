@@ -257,7 +257,9 @@ export default new Vuex.Store({
 
     currentBlock: BlockManager.getRandomBlock(),
     gameState: 'stopped',
+    highestLevel: 0,
   },
+
   getters: {
     brickSize(state) {
       return state.gameManager.brickSize
@@ -278,6 +280,7 @@ export default new Vuex.Store({
       return state.gameState
     },
   },
+
   mutations: {
     mutateBoardState(state, newBoard) {
       console.log(newBoard)
@@ -285,6 +288,9 @@ export default new Vuex.Store({
     },
     mutateCurrentBlock(state, newBlock) {
       state.currentBlock = Object.assign({}, newBlock)
+    },
+    mutateHighest(state, y) {
+      state.highestLevel = y
     },
     mutateNextBlock(state, newBlock) {
       console.log('new next=block')
@@ -303,6 +309,11 @@ export default new Vuex.Store({
         for (let x = 0; x < block.matrix[y].length; x++) {
           if (block.matrix[y][x]) {
             board[block.y + y][block.x + x] = { type: block.color }
+
+            // keep track of highest level we need to check below
+            if (y > context.state.highestLevel) {
+              context.commit('mutateHighest', y)
+            }
           }
         }
       }
@@ -326,7 +337,6 @@ export default new Vuex.Store({
         const row = board[y]
         for (let x = 0; x < Object.keys(row).length; x++) {
           const brick = row[x]
-          console.log(brick)
           if (brick.type === null) {
             rowsToClear[y] = false
             break
@@ -334,25 +344,48 @@ export default new Vuex.Store({
         }
       })
 
-      console.log(rowsToClear)
+      // console.log(rowsToClear)
       /* tslint:enable */
 
-      context.state.mutate('setGameState', 'paused')
+      context.commit('setGameState', 'paused')
       Object.keys(rowsToClear).forEach((y) => {
         if (rowsToClear[y]) {
-          context.state.dispatch('clearRow', y)
+          context.dispatch('clearRow', y)
+
+          // TODO replace 2000 with 'clear wait time' var
+          // setTimeout(() => {console.log('wait')}, 2000)
         }
       })
-      context.state.commit('setGameState', 'running')
+      context.commit('setGameState', 'running')
     },
 
-    clearRow(context, y) {
+    async clearRow(context, y) {
       // TELL RENDERER THAT WE'RE DELETING THIS ROW
 
       // for now JUST clear the blocks
-      const board = context.state.boardState
+      const board: any = Object.assign({}, context.state.boardState)
+      for (let x = 0; x < context.state.gameManager.boardWidth; x++) {
+        console.log('clearing square: ' + x)
+        board[y][x] = await {type: null}
+        // context.state.gameManager.hang(200)
+      }
 
+      // after filled row is clear, check until highestLevel and move
+      // above blocks down
+      //
+      // highestLevel I think needs some rethinking
 
+      // for (; y <= context.state.highestLevel; y++) {
+      for (y -= 1; y >= 0; y--) {
+        for (let x = 0; x < context.state.gameManager.boardWidth; x++) {
+          if (board[y][x].type !!) {
+            board[y +1][x] = board[y][x]
+            board[y][x] = {type: null}
+          }
+        }
+      }
+
+      context.commit('mutateBoardState', board)
     },
 
     moveBlock(context, direction: Direction) {

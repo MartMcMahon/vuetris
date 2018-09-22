@@ -86,4 +86,11 @@ export default class GameManager {
 		}
 		return true
 	}
+
+  // hang(hangTime: number): void {
+  //   var date = new Date()
+  //   var now = null
+  //   do { now = new Date() } while(now - date < hangTime)
+  // }
+
 }
