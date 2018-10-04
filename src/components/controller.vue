@@ -50,7 +50,7 @@ export default {
         case 'ArrowDown':
           console.log('move down')
           this.timer[Direction.down] = new Date()
-          this.$store.dispatch('tickCurrentBlockDown')
+          this.$store.dispatch('moveBlock', {direction: Direction.down, natTick: false})
           break
         case 'a':
         case 'h':
@@ -58,7 +58,7 @@ export default {
           console.log('move left!')
           // move left
           this.timer[Direction.left] = new Date()
-          this.$store.dispatch('moveBlock', Direction.left)
+          this.$store.dispatch('moveBlock', {direction: Direction.left})
           break
         case 'd':
         case 'l':
@@ -66,7 +66,7 @@ export default {
           console.log('move right')
           // move right
           this.timer[Direction.right] = new Date()
-          this.$store.dispatch('moveBlock', Direction.right)
+          this.$store.dispatch('moveBlock', {direction: Direction.right})
           break
         case 'space':
           console.log('jump down')

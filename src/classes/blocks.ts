@@ -147,6 +147,12 @@ export default class BlockManager {
         }
       }
 
+      // check if block can't rotate because it's on the right edge
+      if (newBlock.x >
+        store.state.gameManager.boardWidth - newBlock.width) {
+        newBlock.x =
+          store.state.gameManager.boardWidth - newBlock.width
+      }
       // test for borders
       if (! store.state.gameManager.checkBricks(newBlock) ) {
         return block

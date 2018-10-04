@@ -14,6 +14,14 @@ export default new Vuex.Store({
     gameManager: new GameManager(),
     blockManager: new BlockManager(),
 
+    // scoreMulti[# of lines]
+    baseScore: {
+      1: 40,
+      2: 100,
+      3: 300,
+      4: 1200
+    },
+
     boardState: {
       0: {
         0: {type: null},
@@ -260,6 +268,8 @@ export default new Vuex.Store({
     currentBlock: BlockManager.getRandomBlock(),
     gameState: 'stopped',
     highestLevel: 0,
+    level: 0,
+    score: 0,
   },
 
   getters: {
@@ -281,6 +291,9 @@ export default new Vuex.Store({
     gameState(state) {
       return state.gameState
     },
+    score(state) {
+      return state.score
+    },
   },
 
   mutations: {
@@ -300,13 +313,21 @@ export default new Vuex.Store({
     setGameState(state, newGameState) {
       state.gameState = newGameState
     },
+    // score mutations
+    scoreByLines(state: any, n) {
+      console.log('mutate score')
+      const lineScore = state.baseScore[n] * (state.level +1)
+      state.score += lineScore;
+    },
+    scoreByMove(state) {
+      console.log('mutate score')
+      state.score++;
+    },
   },
 
   actions: {
     addBlockToBoard(context, block) {
-
       const board: any = context.state.boardState
-
       for (let y = 0; y < block.matrix.length; y++) {
         for (let x = 0; x < block.matrix[y].length; x++) {
           if (block.matrix[y][x]) {
@@ -333,6 +354,7 @@ export default new Vuex.Store({
       /* tslint:disable */
       // check for full rows
       const rowsToClear: any = {}
+      let n = context.state.gameManager.boardHeight;
       Object.keys(board).forEach((y) => {
         rowsToClear[y] = true
 
@@ -341,6 +363,7 @@ export default new Vuex.Store({
           const brick = row[x]
           if (brick.type === null) {
             rowsToClear[y] = false
+            n--;
             break
           }
         }
@@ -358,6 +381,11 @@ export default new Vuex.Store({
           // setTimeout(() => {console.log('wait')}, 2000)
         }
       })
+
+      // increase score for cleared lines
+      if (n > 0) {
+        context.commit('scoreByLines', n)
+      }
       context.commit('setGameState', 'running')
     },
 
@@ -377,9 +405,9 @@ export default new Vuex.Store({
       //
       // highestLevel I think needs some rethinking
 
-      // for (; y <= context.state.highestLevel; y++) {
       for (y -= 1; y >= 0; y--) {
-        for (let x = 0; x < context.state.gameManager.boardWidth; x++) {
+        for (let x = 0;
+          x < context.state.gameManager.boardWidth; x++) {
           if (board[y][x].type !!) {
             board[y +1][x] = board[y][x]
             board[y][x] = {type: null}
@@ -390,7 +418,9 @@ export default new Vuex.Store({
       context.commit('mutateBoardState', board)
     },
 
-    moveBlock(context, direction: Direction) {
+    moveBlock(context, payload: {direction: Direction, natTick: boolean | undefined}) {
+      const {direction, natTick} = payload
+      console.log(direction)
       const block = context.state.currentBlock
       let movement: null | undefined | boolean = false
 
@@ -412,6 +442,11 @@ export default new Vuex.Store({
           // console.log('movin down')
           if (movement) {
             block.y++
+            // if this is not natural (natTick), we want
+            // to increase the score
+            if (! natTick) {
+              context.commit('scoreByMove')
+            }
           } else {
             // add to the board!
             context.dispatch('addBlockToBoard', block)
@@ -433,7 +468,8 @@ export default new Vuex.Store({
     },
 
     tickCurrentBlockDown(context) {
-      context.dispatch('moveBlock', Direction.down)
+      context.dispatch('moveBlock',
+        {direction: Direction.down, natTick: true})
     },
 
     rotateBlock(context, rotDirection) {

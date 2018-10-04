@@ -14,13 +14,11 @@ import { mapGetters } from 'vuex'
 
 export default Vue.extend({
 	data() {
-		return {
-			score: 69000,
-		}
+		return { }
 	},
 	computed: {
     ...mapGetters([
-      // 'currentBlock',
+      'score',
     ])
 	},
 	created() {
@@ -35,7 +33,7 @@ export default Vue.extend({
 </script>
 
 <style lang="scss" scoped>
-	
+
 	.score-view {
 		background-color: darkkhaki;
     margin-right: 30px;
