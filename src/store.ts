@@ -266,6 +266,7 @@ export default new Vuex.Store({
     },
 
     currentBlock: BlockManager.getRandomBlock(),
+    nextBlock: BlockManager.getRandomBlock(),
     gameState: 'stopped',
     highestLevel: 0,
     level: 0,
@@ -290,6 +291,9 @@ export default new Vuex.Store({
     },
     gameState(state) {
       return state.gameState
+    },
+    nextBlock(state) {
+      return state.nextBlock
     },
     score(state) {
       return state.score

@@ -87,42 +87,6 @@ export default {
           break
       }
     }
-    //     case 'o':
-    //       // rotate clockwise
-    //       console.log('rotate cw')
-          // this.$store.dispatch('rotateBlock', 'acw')
-    //       break
-    //     case 's':
-    //     case 'j':
-    //     case 'ArrowDown':
-    //       console.log('move down')
-    //       this.$store.dispatch('tickCurrentBlockDown')
-    //       break
-    //     case 'a':
-    //     case 'h':
-    //     case 'ArrowLeft':
-    //       console.log('move left!')
-    //       // move left
-    //       this.$store.dispatch('moveBlock', Direction.left)
-    //       break
-    //     case 'd':
-    //     case 'l':
-    //     case 'ArrowRight':
-    //       console.log('move right')
-    //       // move right
-    //       this.$store.dispatch('moveBlock', Direction.right)
-          // break
-    //     case 'space':
-    //       console.log('jump down')
-    //       break
-    //   }
-    //   // this.$store.dispatch('movePlayer', vec)
-    //   //   .then(
-    //   //     () => this.$store.dispatch('tick'),
-    //   //     () => console.log('rejected'),
-    //   //   )
-
-    // },
   },
 
   created() {

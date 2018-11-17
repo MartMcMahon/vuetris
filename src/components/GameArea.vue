@@ -3,26 +3,26 @@
 	<div class="element-container">
 		<div
 			class="current-block"
-			v-bind:style="{ 
+			v-bind:style="{
 				left: currentBlock.x * brickSize + 'px',
 				top: currentBlock.y * brickSize + 'px'
 			}"
 		>
-			<div 
+			<div
 				class="block-row"
 				v-for="(row, y) in currentBlock.matrix"
 				:key='y'
 			>
-				<div 
+				<div
 					class="block-brick"
 					v-for="(brick, x) in row"
 					:key='x'
 					v-if='brick'
 
-					v-bind:style="{ 
+					v-bind:style="{
 						backgroundColor: currentBlock.color,
-						left: x * brickSize + 'px', 
-						top: y * brickSize + 'px', 
+						left: x * brickSize + 'px',
+						top: y * brickSize + 'px',
 						position: 'abosolute',
 
 						height: brickSize + 'px',
@@ -79,7 +79,7 @@ export default Vue.extend({
 })
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 
 	.block-brick {
 		position: absolute;

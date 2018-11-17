@@ -35,7 +35,7 @@ import { mapGetters } from 'vuex'
 export default Vue.extend({
   data() {
     return {
-      paused: false,
+      paused: true,
       emptyBoard: {
         0: {
           0: {type: null},
@@ -529,13 +529,13 @@ export default Vue.extend({
   },
   methods: {
     pause() {
-      this.paused = !this.paused
       if (this.paused) {
         this.$store.commit('setGameState', 'running')
       }
       else {
         this.$store.commit('setGameState', 'stopped')
       }
+      this.paused = !this.paused
     },
     setEmptyBoard() {
       this.$store.commit('mutateBoardState', this.emptyBoard)
